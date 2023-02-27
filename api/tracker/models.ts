@@ -48,6 +48,12 @@ export interface Criteria {
     $or: [{}]
 }
 
+// export interface Logo {
+//     type: string,
+//     theme: string,
+//     formats: { src: string }[]
+// }
+
 export enum Status {
     submitted = 'Submitted',
     assignment = 'Home Assignment',

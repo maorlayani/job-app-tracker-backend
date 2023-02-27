@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { FilterBy, Application } from './models'
-const { query, getById, add, remove, update } = require('./application.service')
+const { query, getById, add, remove, update } = require('./tracker.service')
 
 async function getApplications(req: Request, res: Response) {
     try {

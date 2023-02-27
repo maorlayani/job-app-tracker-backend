@@ -5,7 +5,8 @@ const {
     addApplication,
     updateApplication,
     deleteApplication
-} = require('./application.controller')
+} = require('./tracker.controller')
+
 const router = express.Router()
 
 router.get('/', getApplications)

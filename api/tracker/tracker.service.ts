@@ -1,5 +1,6 @@
+import { companyData } from "../company-data/models"
 import { Application, DraftApplication, FilterBy } from "./models"
-
+const { getByName } = require('../company-data/companyData.service')
 const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
@@ -17,13 +18,10 @@ async function query(filterBy: FilterBy): Promise<Application[]> {
         const collection = await dbService.getCollection('tracker')
         let applications: Application[] = await collection.find({}).toArray()
         if (!applications || !applications.length) applications = await collection.insertMany(gDefaultApplication)
-        // console.log(JSON.stringify(criteria));
         applications = await collection.find(criteria).toArray()
-        console.log(applications);
-
         return applications
     } catch (err) {
-        console.log('ERROR: cannot find applications', err)
+        console.error('ERROR: cannot find applications', err)
         throw err
     }
 }
@@ -34,7 +32,7 @@ async function getById(applicationId: string): Promise<Application> {
         const application: Application = await collection.findOne({ _id: new ObjectId(applicationId) })
         return application
     } catch (err) {
-        console.log('ERROR: cannot find application', err)
+        console.error('ERROR: cannot find application', err)
         throw err
     }
 }
@@ -42,15 +40,15 @@ async function getById(applicationId: string): Promise<Application> {
 async function add(application: DraftApplication): Promise<Application> {
     try {
         const collection = await dbService.getCollection('tracker')
+        const companyData: companyData = await getByName(application.company)
         const applicationToAdd = {
             ...application,
             submittedAt: Date.now(),
             isPinned: false,
-            logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1677083107/job-application-tracker/na-icon_ngcgpa.png'
+            ..._getCompanyData(companyData, application.companyDesc)
         }
         const { insertedId } = await collection.insertOne(applicationToAdd)
         const addedApplication = await getById(insertedId)
-        console.log('addedApplication', addedApplication)
         return addedApplication
     } catch (err) {
         throw err
@@ -60,16 +58,13 @@ async function add(application: DraftApplication): Promise<Application> {
 async function update(application: Application) {
     try {
         const applicationToSave = { ...application, _id: new ObjectId(application._id) }
-
         const collection = await dbService.getCollection('tracker')
         await collection.updateOne({ _id: applicationToSave._id }, { $set: applicationToSave })
-        console.log(applicationToSave);
         return applicationToSave
     } catch (err) {
         throw err
     }
 }
-
 
 async function remove(applicationId: string): Promise<string> {
     try {
@@ -77,7 +72,7 @@ async function remove(applicationId: string): Promise<string> {
         await collection.deleteOne({ _id: new ObjectId(applicationId) })
         return applicationId
     } catch (err) {
-        console.log('ERROR: cannot remove application', err)
+        console.error('ERROR: cannot remove application', err)
         throw err
     }
 }
@@ -90,13 +85,21 @@ function _buildCriteria(filterBy: FilterBy) {
         const regexTest = { $regex: regex }
         criteria = { $or: [{ location: regexTest }, { position: regexTest }, { company: regexTest }] }
     }
-    if (location.length) {
-        criteria.location = { $in: location }
-    }
-    if (position.length) {
-        criteria.position = { $in: position }
-    }
+    if (location.length) criteria.location = { $in: location }
+    if (position.length) criteria.position = { $in: position }
     return criteria
+}
+
+function _getCompanyData(companyData: companyData, companyDesc: string | undefined) {
+    const logos = companyData.logos
+    const iconLogo = logos.find(logo => logo.type === 'icon')
+    const iconNA =
+        'https://res.cloudinary.com/dqhrqqqul/image/upload/v1677083107/job-application-tracker/na-icon_ngcgpa.png'
+    let applicationData: { logoUrl: string, companyDesc: string } =
+        { logoUrl: '', companyDesc: '' }
+    applicationData.logoUrl = iconLogo ? iconLogo.formats[0].src : iconNA
+    if (!companyDesc) applicationData.companyDesc = companyData.description
+    return applicationData
 }
 
 const gDefaultApplication = [
