@@ -1,34 +1,106 @@
+import { Application, DraftApplication, FilterBy } from "./models"
+
 const dbService = require('../../services/db.service')
-// const ObjectId = require('mongodb').ObjectId
+const ObjectId = require('mongodb').ObjectId
 
 module.exports = {
-    query
+    query,
+    getById,
+    add,
+    update,
+    remove
 }
 
-async function query(filterBy) {
-    let criteria = {}
+async function query(filterBy: FilterBy): Promise<Application[]> {
+    const criteria = _buildCriteria(filterBy)
+    try {
+        const collection = await dbService.getCollection('tracker')
+        let applications: Application[] = await collection.find({}).toArray()
+        if (!applications || !applications.length) applications = await collection.insertMany(gDefaultApplication)
+        // console.log(JSON.stringify(criteria));
+        applications = await collection.find(criteria).toArray()
+        console.log(applications);
+
+        return applications
+    } catch (err) {
+        console.log('ERROR: cannot find applications', err)
+        throw err
+    }
+}
+
+async function getById(applicationId: string): Promise<Application> {
+    try {
+        const collection = await dbService.getCollection('tracker')
+        const application: Application = await collection.findOne({ _id: new ObjectId(applicationId) })
+        return application
+    } catch (err) {
+        console.log('ERROR: cannot find application', err)
+        throw err
+    }
+}
+
+async function add(application: DraftApplication): Promise<Application> {
+    try {
+        const collection = await dbService.getCollection('tracker')
+        const applicationToAdd = {
+            ...application,
+            submittedAt: Date.now(),
+            isPinned: false,
+            logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1677083107/job-application-tracker/na-icon_ngcgpa.png'
+        }
+        const { insertedId } = await collection.insertOne(applicationToAdd)
+        const addedApplication = await getById(insertedId)
+        console.log('addedApplication', addedApplication)
+        return addedApplication
+    } catch (err) {
+        throw err
+    }
+}
+
+async function update(application: Application) {
+    try {
+        const applicationToSave = { ...application, _id: new ObjectId(application._id) }
+
+        const collection = await dbService.getCollection('tracker')
+        await collection.updateOne({ _id: applicationToSave._id }, { $set: applicationToSave })
+        console.log(applicationToSave);
+        return applicationToSave
+    } catch (err) {
+        throw err
+    }
+}
+
+
+async function remove(applicationId: string): Promise<string> {
+    try {
+        const collection = await dbService.getCollection('tracker')
+        await collection.deleteOne({ _id: new ObjectId(applicationId) })
+        return applicationId
+    } catch (err) {
+        console.log('ERROR: cannot remove application', err)
+        throw err
+    }
+}
+
+function _buildCriteria(filterBy: FilterBy) {
+    let criteria: any = {}
     const { serachInput, location, position } = filterBy
     if (serachInput) {
         const regex = new RegExp(serachInput, 'i')
         const regexTest = { $regex: regex }
         criteria = { $or: [{ location: regexTest }, { position: regexTest }, { company: regexTest }] }
     }
-    try {
-        const collection = await dbService.getCollection('tracker')
-        let applications = await collection.find({}).toArray()
-        if (!applications || !applications.length) applications = await collection.insertMany(gDefaultApplication)
-        console.log(criteria);
-        applications = await collection.find(criteria).toArray()
-        return applications
-    } catch (err) {
-        ('ERROR: cannot find boards', err)
-        throw err
+    if (location.length) {
+        criteria.location = { $in: location }
     }
+    if (position.length) {
+        criteria.position = { $in: position }
+    }
+    return criteria
 }
 
 const gDefaultApplication = [
     {
-        id: _makeId(),
         company: 'Google',
         position: 'Frontend Developer',
         submittedAt: Date.now(),
@@ -41,7 +113,6 @@ const gDefaultApplication = [
         isPinned: false
     },
     {
-        id: _makeId(),
         company: 'Apple',
         position: 'Fullstack Developer',
         submittedAt: Date.now(),
@@ -54,7 +125,6 @@ const gDefaultApplication = [
         isPinned: false
     },
     {
-        id: _makeId(),
         company: 'Elbit',
         position: 'Embedd Developer',
         submittedAt: Date.now(),
@@ -67,7 +137,6 @@ const gDefaultApplication = [
         isPinned: false
     },
     {
-        id: _makeId(),
         company: 'Monday',
         position: 'Backend Developer',
         submittedAt: Date.now(),
@@ -80,7 +149,6 @@ const gDefaultApplication = [
         isPinned: false
     },
     {
-        id: _makeId(),
         company: 'ironSource',
         position: 'Java Developer',
         submittedAt: Date.now(),
@@ -93,7 +161,6 @@ const gDefaultApplication = [
         isPinned: false
     },
     {
-        id: _makeId(),
         company: 'Google',
         position: 'Frontend Developer',
         submittedAt: Date.now(),
@@ -106,7 +173,6 @@ const gDefaultApplication = [
         isPinned: false
     },
     {
-        id: _makeId(),
         company: 'Apple',
         position: 'Fullstack Developer',
         submittedAt: Date.now(),
@@ -120,7 +186,6 @@ const gDefaultApplication = [
 
     },
     {
-        id: _makeId(),
         company: 'Elbit',
         position: 'Embedd Developer',
         submittedAt: Date.now(),
@@ -133,12 +198,3 @@ const gDefaultApplication = [
         isPinned: false
     }
 ]
-
-function _makeId(length = 4) {
-    let txt = ''
-    const possible = '0123456789'
-    for (let i = 0; i < length; i++) {
-        txt += possible.charAt(Math.floor(Math.random() * possible.length))
-    }
-    return txt
-}
