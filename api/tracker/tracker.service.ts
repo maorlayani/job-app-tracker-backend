@@ -79,9 +79,9 @@ async function remove(applicationId: string): Promise<string> {
 
 function _buildCriteria(filterBy: FilterBy) {
     let criteria: any = {}
-    const { serachInput, location, position } = filterBy
-    if (serachInput) {
-        const regex = new RegExp(serachInput, 'i')
+    const { searchInput, location, position } = filterBy
+    if (searchInput) {
+        const regex = new RegExp(searchInput, 'i')
         const regexTest = { $regex: regex }
         criteria = { $or: [{ location: regexTest }, { position: regexTest }, { company: regexTest }] }
     }

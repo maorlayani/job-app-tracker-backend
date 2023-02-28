@@ -5,7 +5,7 @@ const { query, getById, add, remove, update } = require('./tracker.service')
 async function getApplications(req: Request, res: Response) {
     try {
         let filterBy: FilterBy = {
-            position: [], location: [], status: [], serachInput: ''
+            position: [], location: [], status: [], searchInput: ''
         }
         if (typeof req.query.filterBy === 'string') {
             filterBy = JSON.parse(req.query.filterBy)

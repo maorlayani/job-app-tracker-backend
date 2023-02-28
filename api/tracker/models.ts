@@ -39,7 +39,7 @@ export interface FilterBy {
     position: string[],
     location: string[],
     status: string[],
-    serachInput: string
+    searchInput: string
 }
 
 export interface Criteria {
