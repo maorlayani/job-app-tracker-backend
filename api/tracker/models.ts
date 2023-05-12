@@ -2,37 +2,40 @@
 export interface Application {
     _id: string,
     company: string,
+    companyDesc?: string,
     position: string,
     positionDesc?: string,
     postedAt?: string,
-    submittedAt: number | string,
-    status: Status,
     location: string,
-    contact?: string,
-    postedDate?: Date,
-    companyDesc?: string,
-    technologies?: string[]
     experience?: number,
+    technologies?: string[]
+    contact?: { name?: string, email?: string, phone?: string, linkedin?: string },
     submittedVia: string,
+    submittedAt: number,
+    status: Status,
+    postedDate?: number,
+    positionUrl?: string,
     logoUrl?: string,
+    links?: [{ name: string, url: string }],
     isPinned: boolean
 }
 
 export interface DraftApplication {
     _id?: string,
     company: string,
+    companyDesc?: string,
     position: string,
     positionDesc?: string,
     postedAt?: string,
-    status: Status,
     location: string,
-    contact?: string,
-    postedDate?: Date,
-    companyDesc?: string,
-    technologies?: string[]
     experience?: number,
+    technologies?: Technology[]
+    contact?: { name?: string, email?: string, phone?: string, linkedin?: string },
     submittedVia: string,
     submittedAt?: number | string
+    status: Status,
+    postedDate?: Date,
+    positionUrl?: string
 }
 
 export interface FilterBy {
@@ -60,4 +63,10 @@ export enum Status {
     interview = 'Scheduled Interview',
     contract = 'Contract',
     rejection = 'Rejection'
+}
+
+export interface Technology {
+    id: string,
+    name: string,
+    logoUrl: string
 }
