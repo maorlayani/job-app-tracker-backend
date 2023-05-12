@@ -22,10 +22,12 @@ if (process.env.NODE_ENV === 'production') {
 }
 const applicationsRoutes = require('./api/tracker/tracker.routes')
 const companysDatasRoutes = require('./api/company-data/companyData.routes')
+const technologiesRoutes = require('./api/technology/technology.routes')
 
 // routes 
 app.use('/api/tracker', applicationsRoutes)
 app.use('/api/company', companysDatasRoutes)
+app.use('/api/technology', technologiesRoutes)
 
 // Make every server-side-route to match the index.html
 // so when requesting http://localhost:3030/index.html/board/123 it will still respond with
