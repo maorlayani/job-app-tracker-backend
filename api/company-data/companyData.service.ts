@@ -11,8 +11,14 @@ module.exports = {
 async function getByName(companyName: string) {
     try {
         const collection = await dbService.getCollection('company_data')
-        let company = await collection.findOne({ name: companyName })
+        console.log(companyName);
+
+        let company = await collection.findOne({ name: companyName.toLowerCase() })
+        console.log('From DB');
+        console.log(company);
         if (!company) {
+            console.log('New company');
+
             company = await add(companyName)
         }
         return company
