@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { FilterBy, Application } from './models'
-const { query, getById, add, remove, update } = require('./tracker.service')
+const { query, getById, add, remove, update, getCoordinates } = require('./tracker.service')
 
 async function getApplications(req: Request, res: Response) {
     try {
@@ -57,12 +57,28 @@ async function deleteApplication(req: Request, res: Response) {
     }
 }
 
+async function getCoordinatesBylocation(req: Request, res: Response) {
+    try {
+        let location = req.params.location
+        // location = location.split('-').join(' ')
+        // console.log(location);
+        const coor = await getCoordinates(location)
+        // console.log('******************************************************************', coor);
+        // console.log(typeof coor);
+
+        res.send(coor.data)
+    } catch (err) {
+        res.status(500).send({ err: 'Failed to get coordinates' })
+    }
+}
+
 module.exports = {
     getApplications,
     getApplicationById,
     addApplication,
     updateApplication,
-    deleteApplication
+    deleteApplication,
+    getCoordinatesBylocation
 }
 
 

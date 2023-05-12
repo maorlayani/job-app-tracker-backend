@@ -1,5 +1,8 @@
+import axios from "axios"
 import { companyData } from "../company-data/models"
 import { Application, DraftApplication, FilterBy } from "./models"
+const { GOOGLE_MAPS_API_KEY } = require('../../private/privateKeys.service')
+
 const { getByName } = require('../company-data/companyData.service')
 const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
@@ -9,7 +12,8 @@ module.exports = {
     getById,
     add,
     update,
-    remove
+    remove,
+    getCoordinates
 }
 
 async function query(filterBy: FilterBy): Promise<Application[]> {
@@ -19,6 +23,8 @@ async function query(filterBy: FilterBy): Promise<Application[]> {
         let applications: Application[] = await collection.find({}).toArray()
         if (!applications || !applications.length) applications = await collection.insertMany(gDefaultApplication)
         applications = await collection.find(criteria).toArray()
+        // console.log(applications);
+
         return applications
     } catch (err) {
         console.error('ERROR: cannot find applications', err)
@@ -39,6 +45,8 @@ async function getById(applicationId: string): Promise<Application> {
 
 async function add(application: DraftApplication): Promise<Application> {
     try {
+        // console.log(application);
+
         const collection = await dbService.getCollection('tracker')
         const companyData: companyData = await getByName(application.company)
         const applicationToAdd = {
@@ -95,11 +103,29 @@ function _getCompanyData(companyData: companyData, companyDesc: string | undefin
     const iconLogo = logos.find(logo => logo.type === 'icon')
     const iconNA =
         'https://res.cloudinary.com/dqhrqqqul/image/upload/v1677083107/job-application-tracker/na-icon_ngcgpa.png'
-    let applicationData: { logoUrl: string, companyDesc: string } =
-        { logoUrl: '', companyDesc: '' }
+    let applicationData: { logoUrl: string, companyDesc: string, links: [{ name: string, url: string }] } =
+        { logoUrl: '', companyDesc: '', links: [{ name: '', url: '' }] }
     applicationData.logoUrl = iconLogo ? iconLogo.formats[0].src : iconNA
-    if (!companyDesc) applicationData.companyDesc = companyData.description
+    applicationData.links = companyData.links
+    applicationData.companyDesc = companyDesc ? companyDesc : companyData.description
+    // if (!companyDesc) applicationData.companyDesc = companyData.description
+    // console.log(applicationData);
+
     return applicationData
+}
+
+async function getCoordinates(location: string) {
+    // console.log(location);
+
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${GOOGLE_MAPS_API_KEY}`
+    try {
+        const res = await axios.get(url)
+        // console.log(res)
+        return res
+    } catch (err) {
+        console.error('Cannot get coordinates', err);
+
+    }
 }
 
 const gDefaultApplication = [
@@ -109,10 +135,47 @@ const gDefaultApplication = [
         submittedAt: Date.now(),
         status: 'Submitted',
         location: 'Tel-Aviv',
-        technologies: ['Javascript', 'HTML', 'CSS'],
+        technologies: [
+            {
+                id: 'tech01',
+                name: 'React',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228176/job-application-tracker/tech-logo/react_clfxcz.svg'
+            },
+            {
+                id: 'tech02',
+                name: 'JavaScript',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228090/job-application-tracker/tech-logo/javascript_ezxryn.svg'
+            },
+            {
+                id: 'tech03',
+                name: 'Angular',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228010/job-application-tracker/tech-logo/angular_e1hjz2.svg'
+            },],
         experience: 5,
         submittedVia: 'Facebook',
         logoUrl: 'https://asset.brandfetch.io/id6O2oGzv-/idSuJ5ik7i.png',
+        links: [
+            {
+                name: "crunchbase",
+                url: "https://crunchbase.com/organization/google"
+            },
+            {
+                name: "twitter",
+                url: "https://twitter.com/google"
+            },
+            {
+                name: "instagram",
+                url: "https://instagram.com/google"
+            },
+            {
+                name: "linkedin",
+                url: "https://linkedin.com/company/google"
+            },
+            {
+                name: "facebook",
+                url: "https://facebook.com/Google"
+            }
+        ],
         isPinned: false
     },
     {
@@ -121,10 +184,42 @@ const gDefaultApplication = [
         submittedAt: Date.now(),
         status: 'Scheduled Interview',
         location: 'Herzliya',
-        technologies: ['React', 'Vue', 'Sass', 'Node.js'],
+        technologies: [
+            {
+                id: 'tech02',
+                name: 'JavaScript',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228090/job-application-tracker/tech-logo/javascript_ezxryn.svg'
+            },
+            {
+                id: 'tech03',
+                name: 'Angular',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228010/job-application-tracker/tech-logo/angular_e1hjz2.svg'
+            },],
         experience: 2,
         submittedVia: 'Linkedin',
         logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672995446/job-application-tracker/idjRWo5z_2_a9ufp3.jpg',
+        links: [
+            {
+                name: "crunchbase",
+                url: "https://crunchbase.com/organization/apple"
+            },
+            {
+                name: "twitter",
+                url: "https://twitter.com/apple"
+            },
+            {
+                name: "instagram",
+                url: "https://instagram.com/apple"
+            },
+            {
+                name: "linkedin",
+                url: "https://linkedin.com/company/apple"
+            },
+            {
+                name: "facebook",
+                url: "https://facebook.com/apple"
+            }
+        ],
         isPinned: false
     },
     {
@@ -133,10 +228,52 @@ const gDefaultApplication = [
         submittedAt: Date.now(),
         status: 'Contract',
         location: 'Haifa',
-        technologies: ['C++', 'AWS'],
+        technologies: [
+            {
+                id: 'tech05',
+                name: 'Node.js',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228414/job-application-tracker/tech-logo/nodejs_x8nvfs.svg'
+            },
+            {
+                id: 'tech06',
+                name: 'Express',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228699/job-application-tracker/tech-logo/icons8-express-js_u2cxmb.svg'
+            },
+            {
+                id: 'tech07',
+                name: 'MongoDB',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228806/job-application-tracker/tech-logo/mongodb_ur58tt.svg'
+            },
+            {
+                id: 'tech08',
+                name: 'MySQL',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228897/job-application-tracker/tech-logo/mysql_opfkyv.svg'
+            },],
         experience: 1,
         submittedVia: 'Friend',
         logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672996691/job-application-tracker/idXH8VPLrT_hlt8ta.jpg',
+        links: [
+            {
+                name: "crunchbase",
+                url: "https://crunchbase.com/organization/elbit"
+            },
+            {
+                name: "twitter",
+                url: "https://twitter.com/elbit"
+            },
+            {
+                name: "instagram",
+                url: "https://instagram.com/elbit"
+            },
+            {
+                name: "linkedin",
+                url: "https://linkedin.com/company/elbit"
+            },
+            {
+                name: "facebook",
+                url: "https://facebook.com/elbit"
+            }
+        ],
         isPinned: false
     },
     {
@@ -145,10 +282,52 @@ const gDefaultApplication = [
         submittedAt: Date.now(),
         status: 'Rejection',
         location: 'Tel-Aviv',
-        technologies: ['Node.js', 'Express', 'Docker'],
+        technologies: [
+            {
+                id: 'tech07',
+                name: 'MongoDB',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228806/job-application-tracker/tech-logo/mongodb_ur58tt.svg'
+            },
+            {
+                id: 'tech08',
+                name: 'MySQL',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228897/job-application-tracker/tech-logo/mysql_opfkyv.svg'
+            },
+            {
+                id: 'tech09',
+                name: 'Redis',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228933/job-application-tracker/tech-logo/redis_dnkbs3.svg'
+            },
+            {
+                id: 'tech010',
+                name: 'Java',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228985/job-application-tracker/tech-logo/java_lfwcjg.svg'
+            }],
         experience: 5,
         submittedVia: 'Linkedin',
         logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672917933/job-application-tracker/idet9mV1nH_ruzwag.jpg',
+        links: [
+            {
+                name: "crunchbase",
+                url: "https://crunchbase.com/organization/monday"
+            },
+            {
+                name: "twitter",
+                url: "https://twitter.com/monday"
+            },
+            {
+                name: "instagram",
+                url: "https://instagram.com/monday"
+            },
+            {
+                name: "linkedin",
+                url: "https://linkedin.com/company/monday"
+            },
+            {
+                name: "facebook",
+                url: "https://facebook.com/monday"
+            }
+        ],
         isPinned: false
     },
     {
@@ -157,47 +336,79 @@ const gDefaultApplication = [
         submittedAt: Date.now(),
         status: 'Scheduled Interview',
         location: 'Tel-Aviv',
-        technologies: ['Java', 'OOP'],
+        technologies: [
+            {
+                id: 'tech09',
+                name: 'Redis',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228933/job-application-tracker/tech-logo/redis_dnkbs3.svg'
+            },
+            {
+                id: 'tech010',
+                name: 'Java',
+                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228985/job-application-tracker/tech-logo/java_lfwcjg.svg'
+            }],
         experience: 1,
         submittedVia: 'Company website',
         logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672996577/job-application-tracker/ido_Zvv_uK_a0hdw1.jpg',
+        links: [
+            {
+                name: "crunchbase",
+                url: "https://crunchbase.com/organization/ironSource"
+            },
+            {
+                name: "twitter",
+                url: "https://twitter.com/ironSource"
+            },
+            {
+                name: "instagram",
+                url: "https://instagram.com/ironSource"
+            },
+            {
+                name: "linkedin",
+                url: "https://linkedin.com/company/ironSource"
+            },
+            {
+                name: "facebook",
+                url: "https://facebook.com/ironSource"
+            }
+        ],
         isPinned: false
     },
-    {
-        company: 'Google',
-        position: 'Frontend Developer',
-        submittedAt: Date.now(),
-        status: 'Submitted',
-        location: 'Tel-Aviv',
-        technologies: ['Javascript', 'HTML', 'CSS'],
-        experience: 5,
-        submittedVia: 'Facebook',
-        logoUrl: 'https://asset.brandfetch.io/id6O2oGzv-/idSuJ5ik7i.png',
-        isPinned: false
-    },
-    {
-        company: 'Apple',
-        position: 'Fullstack Developer',
-        submittedAt: Date.now(),
-        status: 'Scheduled Interview',
-        location: 'Herzliya',
-        technologies: ['React', 'Vue', 'Sass', 'Node.js'],
-        experience: 2,
-        submittedVia: 'Linkedin',
-        logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672995446/job-application-tracker/idjRWo5z_2_a9ufp3.jpg',
-        isPinned: false
+    // {
+    //     company: 'Google',
+    //     position: 'Frontend Developer',
+    //     submittedAt: Date.now(),
+    //     status: 'Submitted',
+    //     location: 'Tel-Aviv',
+    //     technologies: ['Javascript', 'HTML', 'CSS'],
+    //     experience: 5,
+    //     submittedVia: 'Facebook',
+    //     logoUrl: 'https://asset.brandfetch.io/id6O2oGzv-/idSuJ5ik7i.png',
+    //     isPinned: false
+    // },
+    // {
+    //     company: 'Apple',
+    //     position: 'Fullstack Developer',
+    //     submittedAt: Date.now(),
+    //     status: 'Scheduled Interview',
+    //     location: 'Herzliya',
+    //     technologies: ['React', 'Vue', 'Sass', 'Node.js'],
+    //     experience: 2,
+    //     submittedVia: 'Linkedin',
+    //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672995446/job-application-tracker/idjRWo5z_2_a9ufp3.jpg',
+    //     isPinned: false
 
-    },
-    {
-        company: 'Elbit',
-        position: 'Embedd Developer',
-        submittedAt: Date.now(),
-        status: 'Contract',
-        location: 'Haifa',
-        technologies: ['C++', 'AWS'],
-        experience: 1,
-        submittedVia: 'Friend',
-        logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672996691/job-application-tracker/idXH8VPLrT_hlt8ta.jpg',
-        isPinned: false
-    }
+    // },
+    // {
+    //     company: 'Elbit',
+    //     position: 'Embedd Developer',
+    //     submittedAt: Date.now(),
+    //     status: 'Contract',
+    //     location: 'Haifa',
+    //     technologies: ['C++', 'AWS'],
+    //     experience: 1,
+    //     submittedVia: 'Friend',
+    //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672996691/job-application-tracker/idXH8VPLrT_hlt8ta.jpg',
+    //     isPinned: false
+    // }
 ]
