@@ -17,7 +17,9 @@ export interface Application {
     positionUrl?: string,
     logoUrl?: string,
     links?: [{ name: string, url: string }],
-    isPinned: boolean
+    isPinned: boolean,
+    isArchived: boolean,
+    archivedDate?: string
 }
 
 export interface DraftApplication {
@@ -35,7 +37,7 @@ export interface DraftApplication {
     submittedAt?: number | string
     status: Status,
     postedDate?: Date,
-    positionUrl?: string
+    positionUrl?: number
 }
 
 export interface FilterBy {

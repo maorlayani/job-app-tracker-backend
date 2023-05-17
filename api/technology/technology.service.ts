@@ -151,7 +151,7 @@ const gDefaultTechnologies = [
         logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1683783131/job-application-tracker/tech-logo/gulp_h2n0sx.svg'
     },
     {
-        name: 'Bottstrap',
+        name: 'Bootstrap',
         logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1683783209/job-application-tracker/tech-logo/bootstrap_c2ahhm.svg'
     },
     {

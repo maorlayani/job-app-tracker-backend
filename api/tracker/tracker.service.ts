@@ -21,7 +21,7 @@ async function query(filterBy: FilterBy): Promise<Application[]> {
     try {
         const collection = await dbService.getCollection('tracker')
         let applications: Application[] = await collection.find({}).toArray()
-        if (!applications || !applications.length) applications = await collection.insertMany(gDefaultApplication)
+        // if (!applications || !applications.length) applications = await collection.insertMany(gDefaultApplication)
         applications = await collection.find(criteria).toArray()
         // console.log(applications);
 
@@ -51,8 +51,9 @@ async function add(application: DraftApplication): Promise<Application> {
         const companyData: companyData = await getByName(application.company)
         const applicationToAdd = {
             ...application,
-            submittedAt: Date.now(),
+            // submittedAt: Date.now(),
             isPinned: false,
+            isArchived: false,
             ..._getCompanyData(companyData, application.companyDesc)
         }
         const { insertedId } = await collection.insertOne(applicationToAdd)
@@ -136,21 +137,22 @@ const gDefaultApplication = [
         status: 'Submitted',
         location: 'Tel-Aviv',
         technologies: [
-            {
-                id: 'tech01',
-                name: 'React',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228176/job-application-tracker/tech-logo/react_clfxcz.svg'
-            },
-            {
-                id: 'tech02',
-                name: 'JavaScript',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228090/job-application-tracker/tech-logo/javascript_ezxryn.svg'
-            },
-            {
-                id: 'tech03',
-                name: 'Angular',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228010/job-application-tracker/tech-logo/angular_e1hjz2.svg'
-            },],
+            // {
+            //     id: 'tech01',
+            //     name: 'React',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228176/job-application-tracker/tech-logo/react_clfxcz.svg'
+            // },
+            // {
+            //     id: 'tech02',
+            //     name: 'JavaScript',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228090/job-application-tracker/tech-logo/javascript_ezxryn.svg'
+            // },
+            // {
+            //     id: 'tech03',
+            //     name: 'Angular',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228010/job-application-tracker/tech-logo/angular_e1hjz2.svg'
+            // }
+        ],
         experience: 5,
         submittedVia: 'Facebook',
         logoUrl: 'https://asset.brandfetch.io/id6O2oGzv-/idSuJ5ik7i.png',
@@ -176,7 +178,8 @@ const gDefaultApplication = [
                 url: "https://facebook.com/Google"
             }
         ],
-        isPinned: false
+        isPinned: false,
+        isArchived: false
     },
     {
         company: 'Apple',
@@ -185,16 +188,17 @@ const gDefaultApplication = [
         status: 'Scheduled Interview',
         location: 'Herzliya',
         technologies: [
-            {
-                id: 'tech02',
-                name: 'JavaScript',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228090/job-application-tracker/tech-logo/javascript_ezxryn.svg'
-            },
-            {
-                id: 'tech03',
-                name: 'Angular',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228010/job-application-tracker/tech-logo/angular_e1hjz2.svg'
-            },],
+            // {
+            //     id: 'tech02',
+            //     name: 'JavaScript',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228090/job-application-tracker/tech-logo/javascript_ezxryn.svg'
+            // },
+            // {
+            //     id: 'tech03',
+            //     name: 'Angular',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228010/job-application-tracker/tech-logo/angular_e1hjz2.svg'
+            // }
+        ],
         experience: 2,
         submittedVia: 'Linkedin',
         logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672995446/job-application-tracker/idjRWo5z_2_a9ufp3.jpg',
@@ -220,7 +224,8 @@ const gDefaultApplication = [
                 url: "https://facebook.com/apple"
             }
         ],
-        isPinned: false
+        isPinned: false,
+        isArchived: false
     },
     {
         company: 'Elbit',
@@ -229,26 +234,27 @@ const gDefaultApplication = [
         status: 'Contract',
         location: 'Haifa',
         technologies: [
-            {
-                id: 'tech05',
-                name: 'Node.js',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228414/job-application-tracker/tech-logo/nodejs_x8nvfs.svg'
-            },
-            {
-                id: 'tech06',
-                name: 'Express',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228699/job-application-tracker/tech-logo/icons8-express-js_u2cxmb.svg'
-            },
-            {
-                id: 'tech07',
-                name: 'MongoDB',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228806/job-application-tracker/tech-logo/mongodb_ur58tt.svg'
-            },
-            {
-                id: 'tech08',
-                name: 'MySQL',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228897/job-application-tracker/tech-logo/mysql_opfkyv.svg'
-            },],
+            // {
+            //     id: 'tech05',
+            //     name: 'Node.js',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228414/job-application-tracker/tech-logo/nodejs_x8nvfs.svg'
+            // },
+            // {
+            //     id: 'tech06',
+            //     name: 'Express',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228699/job-application-tracker/tech-logo/icons8-express-js_u2cxmb.svg'
+            // },
+            // {
+            //     id: 'tech07',
+            //     name: 'MongoDB',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228806/job-application-tracker/tech-logo/mongodb_ur58tt.svg'
+            // },
+            // {
+            //     id: 'tech08',
+            //     name: 'MySQL',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228897/job-application-tracker/tech-logo/mysql_opfkyv.svg'
+            // }
+        ],
         experience: 1,
         submittedVia: 'Friend',
         logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672996691/job-application-tracker/idXH8VPLrT_hlt8ta.jpg',
@@ -274,7 +280,8 @@ const gDefaultApplication = [
                 url: "https://facebook.com/elbit"
             }
         ],
-        isPinned: false
+        isPinned: false,
+        isArchived: false
     },
     {
         company: 'Monday',
@@ -283,26 +290,27 @@ const gDefaultApplication = [
         status: 'Rejection',
         location: 'Tel-Aviv',
         technologies: [
-            {
-                id: 'tech07',
-                name: 'MongoDB',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228806/job-application-tracker/tech-logo/mongodb_ur58tt.svg'
-            },
-            {
-                id: 'tech08',
-                name: 'MySQL',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228897/job-application-tracker/tech-logo/mysql_opfkyv.svg'
-            },
-            {
-                id: 'tech09',
-                name: 'Redis',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228933/job-application-tracker/tech-logo/redis_dnkbs3.svg'
-            },
-            {
-                id: 'tech010',
-                name: 'Java',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228985/job-application-tracker/tech-logo/java_lfwcjg.svg'
-            }],
+            // {
+            //     id: 'tech07',
+            //     name: 'MongoDB',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228806/job-application-tracker/tech-logo/mongodb_ur58tt.svg'
+            // },
+            // {
+            //     id: 'tech08',
+            //     name: 'MySQL',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228897/job-application-tracker/tech-logo/mysql_opfkyv.svg'
+            // },
+            // {
+            //     id: 'tech09',
+            //     name: 'Redis',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228933/job-application-tracker/tech-logo/redis_dnkbs3.svg'
+            // },
+            // {
+            //     id: 'tech010',
+            //     name: 'Java',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228985/job-application-tracker/tech-logo/java_lfwcjg.svg'
+            // }
+        ],
         experience: 5,
         submittedVia: 'Linkedin',
         logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672917933/job-application-tracker/idet9mV1nH_ruzwag.jpg',
@@ -328,7 +336,8 @@ const gDefaultApplication = [
                 url: "https://facebook.com/monday"
             }
         ],
-        isPinned: false
+        isPinned: false,
+        isArchived: false
     },
     {
         company: 'ironSource',
@@ -337,16 +346,17 @@ const gDefaultApplication = [
         status: 'Scheduled Interview',
         location: 'Tel-Aviv',
         technologies: [
-            {
-                id: 'tech09',
-                name: 'Redis',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228933/job-application-tracker/tech-logo/redis_dnkbs3.svg'
-            },
-            {
-                id: 'tech010',
-                name: 'Java',
-                logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228985/job-application-tracker/tech-logo/java_lfwcjg.svg'
-            }],
+            // {
+            //     id: 'tech09',
+            //     name: 'Redis',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228933/job-application-tracker/tech-logo/redis_dnkbs3.svg'
+            // },
+            // {
+            //     id: 'tech010',
+            //     name: 'Java',
+            //     logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1679228985/job-application-tracker/tech-logo/java_lfwcjg.svg'
+            // }
+        ],
         experience: 1,
         submittedVia: 'Company website',
         logoUrl: 'https://res.cloudinary.com/dqhrqqqul/image/upload/v1672996577/job-application-tracker/ido_Zvv_uK_a0hdw1.jpg',
@@ -372,7 +382,8 @@ const gDefaultApplication = [
                 url: "https://facebook.com/ironSource"
             }
         ],
-        isPinned: false
+        isPinned: false,
+        isArchived: false
     },
     // {
     //     company: 'Google',

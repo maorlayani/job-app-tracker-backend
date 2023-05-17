@@ -1,11 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.79eb99bd.css",
-    "main.js": "/static/js/main.7cba5381.js",
+    "main.css": "/static/css/main.7a97aa3d.css",
+    "main.js": "/static/js/main.23dae75d.js",
     "static/media/LeagueSpartan-Bold.ttf": "/static/media/LeagueSpartan-Bold.287f5d6604adc2276da9.ttf",
     "static/media/LeagueSpartan-Medium.ttf": "/static/media/LeagueSpartan-Medium.e855e0cd01fed78be96f.ttf",
     "static/media/low-poly-grid-haikei.svg": "/static/media/low-poly-grid-haikei.1d88f60f78e01adb10b178c9f82a3057.svg",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/crunchbase.svg": "/static/media/crunchbase.d7cd7aa77c4c3e3876b678aee1857917.svg",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "static/media/selected-background.svg": "/static/media/selected-background.a3213a381902f9813b9495004f674fa4.svg",
     "index.html": "/index.html",
     "static/media/stacked-peaks-haikei-1.svg": "/static/media/stacked-peaks-haikei-1.796099e0cbd7f60b82487cb08ad5140d.svg",
@@ -14,11 +18,11 @@
     "static/media/instagram.svg": "/static/media/instagram.c7c6096cd4e71be67db286e304585e9c.svg",
     "static/media/close-icon.svg": "/static/media/close-icon.fc8844ce1bb39fb60d001f1c3ae71d6b.svg",
     "static/media/facebook.svg": "/static/media/facebook.9b2a83c9d1559084b38b710daef7d3f7.svg",
-    "main.79eb99bd.css.map": "/static/css/main.79eb99bd.css.map",
-    "main.7cba5381.js.map": "/static/js/main.7cba5381.js.map"
+    "main.7a97aa3d.css.map": "/static/css/main.7a97aa3d.css.map",
+    "main.23dae75d.js.map": "/static/js/main.23dae75d.js.map"
   },
   "entrypoints": [
-    "static/css/main.79eb99bd.css",
-    "static/js/main.7cba5381.js"
+    "static/css/main.7a97aa3d.css",
+    "static/js/main.23dae75d.js"
   ]
 }
