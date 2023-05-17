@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "job-application-tracker-backend",
   "version": "1.0.0",
   "description": "",
@@ -7,7 +6,8 @@
   "scripts": {
     "start": "ts-node --esm server.ts",
     "dev": "set NODE_ENV=development && nodemon server.ts",
-    "server:prod": "node --esm server.ts"
+    "build": "tsc",
+    "server:prod": "node ./dist/server.js"
   },
   "keywords": [],
   "author": "",
