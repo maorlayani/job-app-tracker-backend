@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { Technology } from './models'
-const { query, getById } = require('./technology.service')
+import { query, getById } from './technology.service'
 
-async function getTechnologies(req: Request, res: Response) {
+export async function getTechnologies(req: Request, res: Response) {
     try {
         // if (typeof req.query.techSerach === 'string') {
 
@@ -17,7 +17,7 @@ async function getTechnologies(req: Request, res: Response) {
     }
 }
 
-async function getTechnologyById(req: Request, res: Response) {
+export async function getTechnologyById(req: Request, res: Response) {
     try {
         const technologyId: string = req.params.id
         const technology: Technology = await getById(technologyId)
@@ -27,9 +27,9 @@ async function getTechnologyById(req: Request, res: Response) {
     }
 }
 
-module.exports = {
-    getTechnologies,
-    getTechnologyById
-}
+// module.exports = {
+//     getTechnologies,
+//     getTechnologyById
+// }
 
 

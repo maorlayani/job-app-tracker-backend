@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-const { add, getByName } = require('./companyData.service')
+import { add, getByName } from './companyData.service'
 
-async function getCompanyByName(req: Request, res: Response) {
+export async function getCompanyByName(req: Request, res: Response) {
     try {
         const companyName = req.params.name
         const company = await getByName(companyName)
@@ -11,7 +11,7 @@ async function getCompanyByName(req: Request, res: Response) {
     }
 }
 
-async function addCompany(req: Request, res: Response) {
+export async function addCompany(req: Request, res: Response) {
     try {
         const companyName: string = req.body
         const addedApplication = await add(companyName)
@@ -21,9 +21,9 @@ async function addCompany(req: Request, res: Response) {
     }
 }
 
-module.exports = {
-    addCompany,
-    getCompanyByName
-}
+// module.exports = {
+//     addCompany,
+//     getCompanyByName
+// }
 
 

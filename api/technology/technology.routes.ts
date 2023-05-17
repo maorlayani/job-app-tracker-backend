@@ -1,9 +1,9 @@
 import express from 'express'
-const {
+import {
     getTechnologies,
     getTechnologyById
 
-} = require('./technology.controller')
+} from './technology.controller'
 
 const router = express.Router()
 
@@ -11,4 +11,5 @@ router.get('/', getTechnologies)
 router.get('/:id', getTechnologyById)
 
 
-module.exports = router    
+// module.exports = router    
+export default router

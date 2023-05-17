@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { FilterBy, Application } from './models'
-const { query, getById, add, remove, update, getCoordinates } = require('./tracker.service')
+import { query, getById, add, remove, update, getCoordinates } from './tracker.service'
 
-async function getApplications(req: Request, res: Response) {
+export async function getApplications(req: Request, res: Response) {
     try {
         let filterBy: FilterBy = {
             position: [], location: [], status: [], searchInput: ''
@@ -17,7 +17,7 @@ async function getApplications(req: Request, res: Response) {
     }
 }
 
-async function getApplicationById(req: Request, res: Response) {
+export async function getApplicationById(req: Request, res: Response) {
     try {
         const applicationId: string = req.params.id
         const application: Application = await getById(applicationId)
@@ -27,7 +27,7 @@ async function getApplicationById(req: Request, res: Response) {
     }
 }
 
-async function addApplication(req: Request, res: Response) {
+export async function addApplication(req: Request, res: Response) {
     try {
         const application = req.body
         const addedApplication = await add(application)
@@ -37,7 +37,7 @@ async function addApplication(req: Request, res: Response) {
     }
 }
 
-async function updateApplication(req: Request, res: Response) {
+export async function updateApplication(req: Request, res: Response) {
     try {
         const application = req.body
         const updatedApplication = await update(application)
@@ -47,7 +47,7 @@ async function updateApplication(req: Request, res: Response) {
     }
 }
 
-async function deleteApplication(req: Request, res: Response) {
+export async function deleteApplication(req: Request, res: Response) {
     try {
         const applicationId = req.params.id
         await remove(applicationId)
@@ -57,7 +57,7 @@ async function deleteApplication(req: Request, res: Response) {
     }
 }
 
-async function getCoordinatesBylocation(req: Request, res: Response) {
+export async function getCoordinatesBylocation(req: Request, res: Response) {
     try {
         let location = req.params.location
         // location = location.split('-').join(' ')
@@ -66,19 +66,19 @@ async function getCoordinatesBylocation(req: Request, res: Response) {
         // console.log('******************************************************************', coor);
         // console.log(typeof coor);
 
-        res.send(coor.data)
+        // res.send(coor.data)
     } catch (err) {
         res.status(500).send({ err: 'Failed to get coordinates' })
     }
 }
 
-module.exports = {
-    getApplications,
-    getApplicationById,
-    addApplication,
-    updateApplication,
-    deleteApplication,
-    getCoordinatesBylocation
-}
+// module.exports = {
+//     getApplications,
+//     getApplicationById,
+//     addApplication,
+//     updateApplication,
+//     deleteApplication,
+//     getCoordinatesBylocation
+// }
 
 

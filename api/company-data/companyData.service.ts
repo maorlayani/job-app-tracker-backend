@@ -1,16 +1,16 @@
 import axios from "axios"
-const dbService = require('../../services/db.service')
-const ObjectId = require('mongodb').ObjectId
-const { MY_BRAND_API_KEY, MY_BRAND_BASE_URL } = require('../../private/privateKeys.service')
+import { getCollection } from '../../services/db.service'
+import { ObjectId } from 'mongodb'
+import { MY_BRAND_API_KEY, MY_BRAND_BASE_URL } from '../../private/privateKeys.service'
 
-module.exports = {
-    getByName,
-    add,
-}
+// module.exports = {
+//     getByName,
+//     add,
+// }
 
-async function getByName(companyName: string) {
+export async function getByName(companyName: string) {
     try {
-        const collection = await dbService.getCollection('company_data')
+        const collection = await getCollection('company_data')
         console.log(companyName);
 
         let company = await collection.findOne({ name: companyName.toLowerCase() })
@@ -30,7 +30,7 @@ async function getByName(companyName: string) {
 
 async function getById(companyId: string) {
     try {
-        const collection = await dbService.getCollection('company_data')
+        const collection = await getCollection('company_data')
         const company = await collection.findOne({ _id: new ObjectId(companyId) })
         return company
     } catch (err) {
@@ -39,9 +39,9 @@ async function getById(companyId: string) {
     }
 }
 
-async function add(companyName: string) {
+export async function add(companyName: string) {
     try {
-        const collection = await dbService.getCollection('company_data')
+        const collection = await getCollection('company_data')
         let companyData = await _getCompanyData(companyName, 'com')
         if (!companyData) companyData = await _getCompanyData(companyName, 'io')
         // if (!companyData) return {}

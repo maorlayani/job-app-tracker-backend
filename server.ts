@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express'
-const path = require('path')
-const cors = require('cors')
+import path from 'path'
+
+import cors from 'cors'
 
 const app: Application = express()
 
@@ -20,9 +21,9 @@ if (process.env.NODE_ENV === 'production') {
     }
     app.use(cors(corsOptions))
 }
-const applicationsRoutes = require('./api/tracker/tracker.routes')
-const companysDatasRoutes = require('./api/company-data/companyData.routes')
-const technologiesRoutes = require('./api/technology/technology.routes')
+import applicationsRoutes from './api/tracker/tracker.routes'
+import companysDatasRoutes from './api/company-data/companyData.routes'
+import technologiesRoutes from './api/technology/technology.routes'
 
 // routes 
 app.use('/api/tracker', applicationsRoutes)

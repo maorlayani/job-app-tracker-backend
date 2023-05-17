@@ -1,17 +1,18 @@
-const MongoClient = require('mongodb').MongoClient
+// const MongoClient = require('mongodb').MongoClient
+import { MongoClient } from 'mongodb'
 
-const configUrl = require('../config')
+import configUrl from '../config'
 
-module.exports = {
-    getCollection
-}
+// module.exports = {
+//     getCollection
+// }
 
 // Database Name
 const dbName = 'trackerApp_db'
 
 var dbConn: any = null
 
-async function getCollection(collectionName: string) {
+export async function getCollection(collectionName: string) {
     try {
         const db = await connect()
         const collection = await db.collection(collectionName)
@@ -24,8 +25,7 @@ async function getCollection(collectionName: string) {
 async function connect() {
     if (dbConn) return dbConn
     try {
-        const client = await MongoClient.connect(configUrl.dbURL,
-            { useNewUrlParser: true, useUnifiedTopology: true })
+        const client = await MongoClient.connect(configUrl)
         const db = client.db(dbName)
         dbConn = db
         // console.log(dbConn);

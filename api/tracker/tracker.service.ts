@@ -1,25 +1,25 @@
 import axios from "axios"
 import { companyData } from "../company-data/models"
 import { Application, DraftApplication, FilterBy } from "./models"
-const { GOOGLE_MAPS_API_KEY } = require('../../private/privateKeys.service')
+import { GOOGLE_MAPS_API_KEY } from '../../private/privateKeys.service'
 
-const { getByName } = require('../company-data/companyData.service')
-const dbService = require('../../services/db.service')
-const ObjectId = require('mongodb').ObjectId
+import { getByName } from '../company-data/companyData.service'
+import { getCollection } from '../../services/db.service'
+import { ObjectId } from 'mongodb'
 
-module.exports = {
-    query,
-    getById,
-    add,
-    update,
-    remove,
-    getCoordinates
-}
+// module.exports = {
+//     query,
+//     getById,
+//     add,
+//     update,
+//     remove,
+//     getCoordinates
+// }
 
-async function query(filterBy: FilterBy): Promise<Application[]> {
+export async function query(filterBy: FilterBy): Promise<Application[]> {
     const criteria = _buildCriteria(filterBy)
     try {
-        const collection = await dbService.getCollection('tracker')
+        const collection = await getCollection('tracker')
         let applications: Application[] = await collection.find({}).toArray()
         // if (!applications || !applications.length) applications = await collection.insertMany(gDefaultApplication)
         applications = await collection.find(criteria).toArray()
@@ -32,9 +32,9 @@ async function query(filterBy: FilterBy): Promise<Application[]> {
     }
 }
 
-async function getById(applicationId: string): Promise<Application> {
+export async function getById(applicationId: string): Promise<Application> {
     try {
-        const collection = await dbService.getCollection('tracker')
+        const collection = await getCollection('tracker')
         const application: Application = await collection.findOne({ _id: new ObjectId(applicationId) })
         return application
     } catch (err) {
@@ -43,11 +43,11 @@ async function getById(applicationId: string): Promise<Application> {
     }
 }
 
-async function add(application: DraftApplication): Promise<Application> {
+export async function add(application: DraftApplication): Promise<Application> {
     try {
         // console.log(application);
 
-        const collection = await dbService.getCollection('tracker')
+        const collection = await getCollection('tracker')
         const companyData: companyData = await getByName(application.company)
         const applicationToAdd = {
             ...application,
@@ -64,10 +64,10 @@ async function add(application: DraftApplication): Promise<Application> {
     }
 }
 
-async function update(application: Application) {
+export async function update(application: Application) {
     try {
         const applicationToSave = { ...application, _id: new ObjectId(application._id) }
-        const collection = await dbService.getCollection('tracker')
+        const collection = await getCollection('tracker')
         await collection.updateOne({ _id: applicationToSave._id }, { $set: applicationToSave })
         return applicationToSave
     } catch (err) {
@@ -75,9 +75,9 @@ async function update(application: Application) {
     }
 }
 
-async function remove(applicationId: string): Promise<string> {
+export async function remove(applicationId: string): Promise<string> {
     try {
-        const collection = await dbService.getCollection('tracker')
+        const collection = await getCollection('tracker')
         await collection.deleteOne({ _id: new ObjectId(applicationId) })
         return applicationId
     } catch (err) {
@@ -115,7 +115,7 @@ function _getCompanyData(companyData: companyData, companyDesc: string | undefin
     return applicationData
 }
 
-async function getCoordinates(location: string) {
+export async function getCoordinates(location: string) {
     // console.log(location);
 
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${GOOGLE_MAPS_API_KEY}`

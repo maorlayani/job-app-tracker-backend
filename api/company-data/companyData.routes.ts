@@ -1,12 +1,14 @@
 import express from 'express'
-const {
+import {
     addCompany,
     getCompanyByName
-} = require('./companyData.controller')
+}
+    from './companyData.controller'
 
 const router = express.Router()
 
 router.get('/:name', getCompanyByName)
 router.post('/', addCompany)
 
-module.exports = router    
+// module.exports = router  
+export default router

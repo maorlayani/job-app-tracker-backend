@@ -1,12 +1,12 @@
 import express from 'express'
-const {
+import {
     getApplications,
     getApplicationById,
     addApplication,
     updateApplication,
     deleteApplication,
     getCoordinatesBylocation
-} = require('./tracker.controller')
+} from './tracker.controller'
 
 const router = express.Router()
 
@@ -17,4 +17,5 @@ router.post('/', addApplication)
 router.put('/:id', updateApplication)
 router.delete('/:id', deleteApplication)
 
-module.exports = router   
+// module.exports = router  
+export default router 

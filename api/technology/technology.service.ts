@@ -1,17 +1,17 @@
 import { companyData } from "../company-data/models"
 import { Technology } from "./models"
-const dbService = require('../../services/db.service')
+import { getCollection } from '../../services/db.service'
 const ObjectId = require('mongodb').ObjectId
 
-module.exports = {
-    query,
-    getById
-}
+// module.exports = {
+//     query,
+//     getById
+// }
 
-async function query(techSearch: string): Promise<Technology[]> {
+export async function query(techSearch: any): Promise<Technology[]> {
     try {
         const criteria = _buildCriteria(techSearch)
-        const collection = await dbService.getCollection('technologies')
+        const collection = await getCollection('technologies')
         let technologies: Technology[] = await collection.find({}).toArray()
         if (!technologies || !technologies.length) technologies = await collection.insertMany(gDefaultTechnologies)
         technologies = await collection.find(criteria).toArray()
@@ -32,9 +32,9 @@ function _buildCriteria(techSearch: string) {
     return criteria
 }
 
-async function getById(technologyId: string): Promise<Technology> {
+export async function getById(technologyId: string): Promise<Technology> {
     try {
-        const collection = await dbService.getCollection('technologies')
+        const collection = await getCollection('technologies')
         const technology: Technology = await collection.findOne({ _id: new ObjectId(technologyId) })
         return technology
     } catch (err) {
