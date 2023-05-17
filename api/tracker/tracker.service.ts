@@ -1,7 +1,7 @@
 import axios from "axios"
 import { companyData } from "../company-data/models"
 import { Application, DraftApplication, FilterBy } from "./models"
-import { GOOGLE_MAPS_API_KEY } from '../../private/privateKeys.service'
+// import { GOOGLE_MAPS_API_KEY } from '../../private/privateKeys.service'
 
 import { getByName } from '../company-data/companyData.service'
 import { getCollection } from '../../services/db.service'
@@ -118,7 +118,7 @@ function _getCompanyData(companyData: companyData, companyDesc: string | undefin
 export async function getCoordinates(location: string) {
     // console.log(location);
 
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${GOOGLE_MAPS_API_KEY}`
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GOOGLE_MAPS_API_KEY}`
     try {
         const res = await axios.get(url)
         // console.log(res)

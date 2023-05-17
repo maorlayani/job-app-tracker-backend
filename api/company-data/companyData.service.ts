@@ -1,7 +1,7 @@
 import axios from "axios"
 import { getCollection } from '../../services/db.service'
 import { ObjectId } from 'mongodb'
-import { MY_BRAND_API_KEY, MY_BRAND_BASE_URL } from '../../private/privateKeys.service'
+// import { MY_BRAND_API_KEY, MY_BRAND_BASE_URL } from '../../private/privateKeys.service'
 
 // module.exports = {
 //     getByName,
@@ -56,10 +56,10 @@ export async function add(companyName: string) {
 async function _getCompanyData(companyName: string, domainExtension: string) {
     try {
         const apiData = await axios(
-            `${MY_BRAND_BASE_URL}${companyName}.${domainExtension}`,
+            `${process.env.MY_BRAND_BASE_URL}${companyName}.${domainExtension}`,
             {
                 headers: {
-                    'Authorization': `Bearer ${MY_BRAND_API_KEY}`
+                    'Authorization': `Bearer ${process.env.MY_BRAND_API_KEY}`
                 }
             })
         console.log('API CALL');
