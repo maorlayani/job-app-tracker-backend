@@ -1,6 +1,13 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "compilerOptions": {
-    "module": "CommonJS"
-  }
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+  "include": [
+    "/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
