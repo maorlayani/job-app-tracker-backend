@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "start": "ts-node --esm server.ts",
+    "start": "nodemon server.ts",
     "dev": "set NODE_ENV=development && nodemon server.ts",
     "build": "tsc",
     "server:prod": "node ./dist/server.js"
