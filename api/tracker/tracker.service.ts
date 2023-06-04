@@ -1,20 +1,9 @@
 import axios from "axios"
 import { companyData } from "../company-data/models"
 import { Application, DraftApplication, FilterBy } from "./models"
-// import { GOOGLE_MAPS_API_KEY } from '../../private/privateKeys.service'
-
 import { getByName } from '../company-data/companyData.service'
 import { getCollection } from '../../services/db.service'
 import { ObjectId } from 'mongodb'
-
-// module.exports = {
-//     query,
-//     getById,
-//     add,
-//     update,
-//     remove,
-//     getCoordinates
-// }
 
 export async function query(filterBy: FilterBy): Promise<Application[]> {
     const criteria = _buildCriteria(filterBy)
@@ -23,8 +12,6 @@ export async function query(filterBy: FilterBy): Promise<Application[]> {
         let applications: Application[] = await collection.find({}).toArray()
         // if (!applications || !applications.length) applications = await collection.insertMany(gDefaultApplication)
         applications = await collection.find(criteria).toArray()
-        // console.log(applications);
-
         return applications
     } catch (err) {
         console.error('ERROR: cannot find applications', err)
@@ -45,13 +32,10 @@ export async function getById(applicationId: string): Promise<Application> {
 
 export async function add(application: DraftApplication): Promise<Application> {
     try {
-        // console.log(application);
-
         const collection = await getCollection('tracker')
         const companyData: companyData = await getByName(application.company)
         const applicationToAdd = {
             ...application,
-            // submittedAt: Date.now(),
             isPinned: false,
             isArchived: false,
             ..._getCompanyData(companyData, application.companyDesc)
@@ -88,7 +72,7 @@ export async function remove(applicationId: string): Promise<string> {
 
 function _buildCriteria(filterBy: FilterBy) {
     let criteria: any = {}
-    const { searchInput, location, position } = filterBy
+    const { searchInput, location, position, status } = filterBy
     if (searchInput) {
         const regex = new RegExp(searchInput, 'i')
         const regexTest = { $regex: regex }
@@ -96,6 +80,7 @@ function _buildCriteria(filterBy: FilterBy) {
     }
     if (location.length) criteria.location = { $in: location }
     if (position.length) criteria.position = { $in: position }
+    if (status.length) criteria.status = { $in: status }
     return criteria
 }
 
@@ -109,23 +94,16 @@ function _getCompanyData(companyData: companyData, companyDesc: string | undefin
     applicationData.logoUrl = iconLogo ? iconLogo.formats[0].src : iconNA
     applicationData.links = companyData.links
     applicationData.companyDesc = companyDesc ? companyDesc : companyData.description
-    // if (!companyDesc) applicationData.companyDesc = companyData.description
-    // console.log(applicationData);
-
     return applicationData
 }
 
 export async function getCoordinates(location: string) {
-    // console.log(location);
-
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GOOGLE_MAPS_API_KEY}`
     try {
         const res = await axios.get(url)
-        // console.log(res)
         return res
     } catch (err) {
         console.error('Cannot get coordinates', err);
-
     }
 }
 
