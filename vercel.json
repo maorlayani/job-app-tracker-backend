@@ -28,7 +28,7 @@
             ]
         },
         {
-            "source": "https://jobs-app-tracker.vercel.app/(.*)",
+            "source": "jobs-app-tracker.vercel.app/(.*)",
             "headers": [
                 {
                     "key": "Access-Control-Allow-Origin",
