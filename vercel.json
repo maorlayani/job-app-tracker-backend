@@ -27,7 +27,7 @@
                 },
                 {
                     "key": "Access-Control-Allow-Origin",
-                    "value": "*"
+                    "value": "https://jobs-app-tracker.vercel.app"
                 },
                 {
                     "key": "Access-Control-Allow-Methods",
@@ -48,7 +48,7 @@
                 },
                 {
                     "key": "Access-Control-Allow-Origin",
-                    "value": "*"
+                    "value": "https://jobs-app-tracker.vercel.app"
                 },
                 {
                     "key": "Access-Control-Allow-Methods",
