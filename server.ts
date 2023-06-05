@@ -1,5 +1,5 @@
 import express, { Application, Request, Response } from 'express'
-import path from 'path'
+// import path from 'path'
 
 import cors from 'cors'
 
@@ -11,7 +11,7 @@ app.use(express.json())
 
 if (process.env.NODE_ENV === 'production') {
     // Express serve static files on production environment
-    app.use(express.static(path.resolve(__dirname, 'public')))
+    // app.use(express.static(path.resolve(__dirname, 'public')))
 } else {
     // Configuring CORS 
     const corsOptions = {
@@ -30,18 +30,5 @@ app.use('/api/tracker', applicationsRoutes)
 app.use('/api/company', companysDatasRoutes)
 app.use('/api/technology', technologiesRoutes)
 
-// Make every server-side-route to match the index.html
-// so when requesting http://localhost:3030/index.html/board/123 it will still respond with
-// our SPA (single page app) (the index.html file) and allow react-router to take it from there
-// app.get('/**', (req: Request, res: Response) => {
-//     res.sendFile(path.join(__dirname, 'public', 'index.html'))
-// })
-
 const port = process.env.PORT || 3030
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(port, () => console.log('Server running at port: ' + port))
-}
-console.log(process.env.PORT);
-
-
-module.exports = app
+app.listen(port, () => console.log('Server running at port: ' + port))
