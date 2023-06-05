@@ -19,7 +19,7 @@
     ],
     "headers": [
         {
-            "source": "/(.*)",
+            "source": "/api/(.*)",
             "headers": [
                 {
                     "key": "Access-Control-Allow-Credentials",
@@ -40,7 +40,7 @@
             ]
         },
         {
-            "source": "/jobs-app-tracker.vercel.app//(.*)",
+            "source": "/jobs-app-tracker.vercel.app/(.*)",
             "headers": [
                 {
                     "key": "Access-Control-Allow-Credentials",
