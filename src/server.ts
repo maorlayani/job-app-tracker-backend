@@ -16,6 +16,7 @@ app.use(express.json())
 const corsOptions = {
     // Make sure origin contains the url your frontend is running on
     origin: ['http://127.0.0.1:3000', 'http://localhost:3000', 'https://jobs-app-tracker.vercel.app'],
+    "Access-Control-Allow-Origin": 'https://jobs-app-tracker.vercel.app',
     credentials: true
 }
 app.use(cors(corsOptions))
