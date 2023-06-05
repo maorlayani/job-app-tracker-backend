@@ -33,12 +33,15 @@ app.use('/api/technology', technologiesRoutes)
 // Make every server-side-route to match the index.html
 // so when requesting http://localhost:3030/index.html/board/123 it will still respond with
 // our SPA (single page app) (the index.html file) and allow react-router to take it from there
-app.get('/**', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'))
-})
+// app.get('/**', (req: Request, res: Response) => {
+//     res.sendFile(path.join(__dirname, 'public', 'index.html'))
+// })
 
+const port = process.env.PORT || 3030
 if (process.env.NODE_ENV !== 'production') {
-    const port = process.env.PORT || 3030
     app.listen(port, () => console.log('Server running at port: ' + port))
 }
+console.log(process.env.PORT);
+
+
 module.exports = app
