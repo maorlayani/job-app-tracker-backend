@@ -24,13 +24,13 @@ if (process.env.NODE_ENV === 'production') {
 import applicationsRoutes from './api/tracker/tracker.routes'
 import companysDatasRoutes from './api/company-data/companyData.routes'
 import technologiesRoutes from './api/technology/technology.routes'
-import userRoutes from './api/user/user.routes'
+// import userRoutes from './api/user/user.routes'
 
 // routes 
 app.use('/api/tracker', applicationsRoutes)
 app.use('/api/company', companysDatasRoutes)
 app.use('/api/technology', technologiesRoutes)
-app.use('/api/user', userRoutes)
+// app.use('/api/user', userRoutes)
 
 // Make every server-side-route to match the index.html
 // so when requesting http://localhost:3030/index.html/board/123 it will still respond with
