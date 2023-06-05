@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express'
 // import path from 'path'
-// import cors from 'cors'
+import cors from 'cors'
 
 const app: Application = express()
 
@@ -9,16 +9,16 @@ app.use(express.json())
 
 
 // if (process.env.NODE_ENV === 'production') {
-//     // Express serve static files on production environment
-//     app.use(express.static(path.resolve(__dirname, 'public')))
+// Express serve static files on production environment
+// app.use(express.static(path.resolve(__dirname, 'public')))
 // } else {
-//     // Configuring CORS 
-//     const corsOptions = {
-//         // Make sure origin contains the url your frontend is running on
-//         origin: ['http://127.0.0.1:3000', 'http://localhost:3000'],
-//         credentials: true
-//     }
-//     app.use(cors(corsOptions))
+// Configuring CORS 
+const corsOptions = {
+    // Make sure origin contains the url your frontend is running on
+    origin: ['http://127.0.0.1:3000', 'http://localhost:3000'],
+    credentials: true
+}
+app.use(cors(corsOptions))
 // }
 import applicationsRoutes from './api/tracker/tracker.routes'
 import companysDatasRoutes from './api/company-data/companyData.routes'
