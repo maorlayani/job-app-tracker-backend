@@ -15,7 +15,7 @@ app.use(express.json())
 // Configuring CORS 
 const corsOptions = {
     // Make sure origin contains the url your frontend is running on
-    origin: ['http://127.0.0.1:3000', 'http://localhost:3000'],
+    origin: ['http://127.0.0.1:3000', 'http://localhost:3000', 'https://jobs-app-tracker.vercel.app'],
     credentials: true
 }
 app.use(cors(corsOptions))
@@ -30,7 +30,7 @@ app.use('/api/company', companysDatasRoutes)
 app.use('/api/technology', technologiesRoutes)
 
 // Make every server-side-route to match the index.html
-// so when requesting http://localhost:3030/index.html/board/123 it will still respond with
+// so when requesting http://localhost:3030/index.html/board/123 it will still respond with 
 // our SPA (single page app) (the index.html file) and allow react-router to take it from there
 // app.get('/**', (req: Request, res: Response) => {
 //     res.sendFile(path.join(__dirname, 'public', 'index.html'))
