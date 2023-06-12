@@ -7,7 +7,7 @@ exports.add = exports.getByName = void 0;
 const axios_1 = __importDefault(require("axios"));
 const db_service_1 = require("../../services/db.service");
 const mongodb_1 = require("mongodb");
-// import { MY_BRAND_API_KEY, MY_BRAND_BASE_URL } from '../../private/privateKeys.service'
+const privateKeys_service_1 = require("../../private/privateKeys.service");
 async function getByName(companyName) {
     try {
         const collection = await (0, db_service_1.getCollection)('company_data');
@@ -62,12 +62,12 @@ async function add(companyName) {
 exports.add = add;
 async function _getCompanyData(companyName, domainExtension) {
     try {
-        const apiData = await (0, axios_1.default)(`${process.env.MY_BRAND_BASE_URL}${companyName}.${domainExtension}`, 
-        // `${MY_BRAND_BASE_URL}${companyName}.${domainExtension}`,
-        {
+        const apiData = await (0, axios_1.default)(
+        // `${process.env.MY_BRAND_BASE_URL}${companyName}.${domainExtension}`,
+        `${privateKeys_service_1.MY_BRAND_BASE_URL}${companyName}.${domainExtension}`, {
             headers: {
-                'Authorization': `Bearer ${process.env.MY_BRAND_API_KEY}`
-                // 'Authorization': `Bearer ${MY_BRAND_API_KEY}`
+                // 'Authorization': `Bearer ${process.env.MY_BRAND_API_KEY}`
+                'Authorization': `Bearer ${privateKeys_service_1.MY_BRAND_API_KEY}`
             }
         });
         // console.log('API CALL');

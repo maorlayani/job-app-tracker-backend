@@ -2,15 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoordinatesBylocation = exports.deleteApplication = exports.updateApplication = exports.addApplication = exports.getApplicationById = exports.getApplications = void 0;
 const tracker_service_1 = require("./tracker.service");
+const user_service_1 = require("../user/user.service");
 async function getApplications(req, res) {
     try {
         let filterBy = {
             position: [], location: [], status: [], searchInput: ''
         };
-        if (typeof req.query.filterBy === 'string') {
+        if (typeof req.query.filterBy === 'string')
             filterBy = JSON.parse(req.query.filterBy);
-        }
-        const applications = await (0, tracker_service_1.query)(filterBy);
+        let JWT = '';
+        if (typeof req.query.JWT === 'string')
+            JWT = JSON.parse(req.query.JWT);
+        let userId = await _setUserId(JWT);
+        const applications = await (0, tracker_service_1.query)(filterBy, userId);
         res.send(applications);
     }
     catch (err) {
@@ -31,8 +35,11 @@ async function getApplicationById(req, res) {
 exports.getApplicationById = getApplicationById;
 async function addApplication(req, res) {
     try {
-        const application = req.body;
-        const addedApplication = await (0, tracker_service_1.add)(application);
+        const application = req.body.application;
+        const JWT = req.body.JWT;
+        console.log(req.body);
+        let userId = await _setUserId(JWT);
+        const addedApplication = await (0, tracker_service_1.add)(application, userId);
         res.send(addedApplication);
     }
     catch (err) {
@@ -65,24 +72,22 @@ exports.deleteApplication = deleteApplication;
 async function getCoordinatesBylocation(req, res) {
     try {
         let location = req.params.location;
-        // location = location.split('-').join(' ')
-        // console.log(location);
         const coor = await (0, tracker_service_1.getCoordinates)(location);
-        // console.log('******************************************************************', coor);
-        // console.log(typeof coor);
-        // res.send(coor.data)
     }
     catch (err) {
         res.status(500).send({ err: 'Failed to get coordinates' });
     }
 }
 exports.getCoordinatesBylocation = getCoordinatesBylocation;
-// module.exports = {
-//     getApplications,
-//     getApplicationById,
-//     addApplication,
-//     updateApplication,
-//     deleteApplication,
-//     getCoordinatesBylocation
-// }
+async function _setUserId(jwt) {
+    try {
+        let userId = await (0, user_service_1.getLoggedInUser)(jwt);
+        if (!userId)
+            userId = 'guest101';
+        return userId;
+    }
+    catch (err) {
+        throw err;
+    }
+}
 //# sourceMappingURL=tracker.controller.js.map

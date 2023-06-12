@@ -1,6 +1,6 @@
-
 export interface Application {
     _id: string,
+    userId: string,
     company: string,
     companyDesc?: string,
     position: string,
