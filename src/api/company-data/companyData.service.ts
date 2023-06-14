@@ -34,6 +34,8 @@ export async function add(companyName: string) {
     try {
         const collection = await getCollection('company_data')
         let companyData = await _getCompanyData(companyName, 'com')
+        console.log('companyData FROM ADD', companyData);
+
         if (!companyData) companyData = await _getCompanyData(companyName, 'io')
         if (!companyData) {
             companyData = {

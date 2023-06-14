@@ -68,7 +68,8 @@ export async function deleteApplication(req: Request, res: Response) {
 export async function getCoordinatesBylocation(req: Request, res: Response) {
     try {
         let location = req.params.location
-        const coor = await getCoordinates(location)
+        const results = await getCoordinates(location)
+        res.send(results)
     } catch (err) {
         res.status(500).send({ err: 'Failed to get coordinates' })
     }

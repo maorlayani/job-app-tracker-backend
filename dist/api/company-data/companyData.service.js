@@ -40,6 +40,7 @@ async function add(companyName) {
     try {
         const collection = await (0, db_service_1.getCollection)('company_data');
         let companyData = await _getCompanyData(companyName, 'com');
+        console.log('companyData FROM ADD', companyData);
         if (!companyData)
             companyData = await _getCompanyData(companyName, 'io');
         if (!companyData) {

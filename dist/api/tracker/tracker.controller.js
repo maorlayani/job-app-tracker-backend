@@ -72,7 +72,8 @@ exports.deleteApplication = deleteApplication;
 async function getCoordinatesBylocation(req, res) {
     try {
         let location = req.params.location;
-        const coor = await (0, tracker_service_1.getCoordinates)(location);
+        const results = await (0, tracker_service_1.getCoordinates)(location);
+        res.send(results);
     }
     catch (err) {
         res.status(500).send({ err: 'Failed to get coordinates' });

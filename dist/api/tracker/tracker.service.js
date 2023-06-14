@@ -8,6 +8,7 @@ const axios_1 = __importDefault(require("axios"));
 const companyData_service_1 = require("../company-data/companyData.service");
 const db_service_1 = require("../../services/db.service");
 const mongodb_1 = require("mongodb");
+// import { GOOGLE_MAPS_API_KEY } from "../../private/privateKeys.service"
 async function query(filterBy, userId) {
     const criteria = _buildCriteria(filterBy, userId);
     try {
@@ -110,20 +111,11 @@ function _getCompanyData(companyData, companyDesc) {
     applicationData.companyDesc = companyDesc ? companyDesc : companyData.description;
     return applicationData;
 }
-async function _createNewTrackerBoard(userId) {
-    const collection = await (0, db_service_1.getCollection)('tracker');
-    const newTrackerBoard = {
-        userId,
-        applications: []
-    };
-    const { insertedId } = await collection.insertOne(newTrackerBoard);
-    return insertedId;
-}
 async function getCoordinates(location) {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
     try {
         const res = await axios_1.default.get(url);
-        return res;
+        return res.data.results;
     }
     catch (err) {
         console.error('Cannot get coordinates', err);

@@ -4,6 +4,7 @@ import { Application, DraftApplication, FilterBy } from "./models"
 import { getByName } from '../company-data/companyData.service'
 import { getCollection } from '../../services/db.service'
 import { ObjectId } from 'mongodb'
+// import { GOOGLE_MAPS_API_KEY } from "../../private/privateKeys.service"
 
 export async function query(filterBy: FilterBy, userId: string): Promise<Application[]> {
     const criteria = _buildCriteria(filterBy, userId)
@@ -101,21 +102,12 @@ function _getCompanyData(companyData: companyData, companyDesc: string | undefin
     applicationData.companyDesc = companyDesc ? companyDesc : companyData.description
     return applicationData
 }
-async function _createNewTrackerBoard(userId: string) {
-    const collection = await getCollection('tracker')
-    const newTrackerBoard = {
-        userId,
-        applications: []
-    }
-    const { insertedId } = await collection.insertOne(newTrackerBoard)
-    return insertedId
-}
 
 export async function getCoordinates(location: string) {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GOOGLE_MAPS_API_KEY}`
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${process.env.GOOGLE_MAPS_API_KEY}`
     try {
         const res = await axios.get(url)
-        return res
+        return res.data.results
     } catch (err) {
         console.error('Cannot get coordinates', err);
     }

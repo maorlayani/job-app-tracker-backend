@@ -11,6 +11,7 @@ export async function getLoggedInUser(JWT: string) {
         client
             .setEndpoint('https://cloud.appwrite.io/v1')
             .setProject(process.env.APPWRITE_PROJECT_ID)
+            // .setProject(APPWRITE_PROJECT_ID)
             .setJWT(JWT)
         const account = new Account(client);
         const user = await account.get()
