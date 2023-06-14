@@ -1,7 +1,7 @@
 import axios from "axios"
 import { getCollection } from '../../services/db.service'
 import { ObjectId } from 'mongodb'
-import { MY_BRAND_API_KEY, MY_BRAND_BASE_URL } from '../../private/privateKeys.service'
+// import { MY_BRAND_API_KEY, MY_BRAND_BASE_URL } from '../../private/privateKeys.service'
 
 export async function getByName(companyName: string) {
     try {
@@ -10,7 +10,6 @@ export async function getByName(companyName: string) {
         const regexTest = { $regex: regex }
         let company = await collection.findOne({ name: regexTest })
         if (!company) {
-            // console.log('New company');
             company = await add(companyName)
         }
         return company
