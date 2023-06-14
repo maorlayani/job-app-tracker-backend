@@ -55,11 +55,11 @@ export async function add(companyName: string) {
 async function _getCompanyData(companyName: string, domainExtension: string) {
     try {
         const apiData = await axios(
-            `${process.env.MY_BRAND_BASE_URL || MY_BRAND_BASE_URL}${companyName}.${domainExtension}`,
+            `${process.env.MY_BRAND_BASE_URL}${companyName}.${domainExtension}`,
             // `${MY_BRAND_BASE_URL}${companyName}.${domainExtension}`,
             {
                 headers: {
-                    'Authorization': `Bearer ${process.env.MY_BRAND_API_KEY || MY_BRAND_API_KEY}`
+                    'Authorization': `Bearer ${process.env.MY_BRAND_API_KEY}`
                     // 'Authorization': `Bearer ${MY_BRAND_API_KEY}`
                 }
             })
