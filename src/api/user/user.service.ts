@@ -1,5 +1,5 @@
 import { Account } from "node-appwrite";
-import { APPWRITE_PROJECT_ID } from "../../private/privateKeys.service"
+// import { APPWRITE_PROJECT_ID } from "../../private/privateKeys.service"
 
 const { Client } = require('node-appwrite');
 
@@ -10,7 +10,7 @@ export async function getLoggedInUser(JWT: string) {
         if (!JWT) return null
         client
             .setEndpoint('https://cloud.appwrite.io/v1')
-            .setProject(APPWRITE_PROJECT_ID)
+            .setProject(process.env.APPWRITE_PROJECT_ID)
             .setJWT(JWT)
         const account = new Account(client);
         const user = await account.get()
